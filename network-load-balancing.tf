@@ -1,5 +1,5 @@
 /*
-  * This script will help us to create a Network Load Balancer
+  * This script will help us to setup a Network Load Balancer
 */
 provider "google" {
   project     = var.project
