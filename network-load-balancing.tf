@@ -49,7 +49,7 @@
 #   network_interface {
 #     network = data.google_compute_network.tf_default.self_link
 #     access_config {
-#       // Ephemeral public IP
+#       # Ephemeral public IP
 #     }
 #   }
 
