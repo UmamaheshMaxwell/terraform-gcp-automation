@@ -6,3 +6,7 @@
 # output "service_account_name" {
 #   value = data.google_service_account.tf_sa_name.email
 # }
+
+# output "instance_template" {
+#   value = module.instance_template_data
+# }

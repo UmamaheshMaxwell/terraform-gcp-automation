@@ -1,5 +1,15 @@
 # terraform {
 #   required_providers {
+#     google = {
+#         source = "hashicorp/google"
+#         version = "4.58.0"
+#     }
+#   }
+# }
+
+
+# terraform {
+#   required_providers {
 #     # mysql = {
 #     #   source  = "petoju/mysql"
 #     #   version = "~> 3.0.32"
