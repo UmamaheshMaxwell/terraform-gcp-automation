@@ -1,11 +1,6 @@
 /*
   * This script will help us to create a Network Load Balancer
 */
-provider "google" {
-  project     = var.project
-  region      = var.region
-  credentials = var.credentials
-}
 
 data "google_compute_network" "tf_default" {
   name = "default"

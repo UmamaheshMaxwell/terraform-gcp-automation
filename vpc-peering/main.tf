@@ -1,5 +1,6 @@
-
-
+/*
+  * Setting up VPC Netwwork peering
+*/
 resource "google_compute_network" "tf_vpc1" {
   name = "vpc-1"
   auto_create_subnetworks = false
@@ -36,7 +37,7 @@ resource "google_compute_firewall" "tf_firewall_1" {
     ports = ["22", "80"]
   }
 
-   source_tags = ["peering"]
+   source_ranges = [ "0.0.0.0/0" ]
 }
 
 resource "google_compute_firewall" "tf_firewall_2" {

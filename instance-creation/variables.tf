@@ -13,7 +13,6 @@ variable "machine_type" {
   description = "This will be a machine type"
 }
 
-
 variable "image" {
   type = string
   description = "This will be a image"
