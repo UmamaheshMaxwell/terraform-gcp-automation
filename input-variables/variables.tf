@@ -1,43 +1,23 @@
-variable "project" {
-  type    = string
-  default = "gcp-training-377619"
-}
-
 variable "name" {
   type        = string
   description = "This will be a instance name"
 }
 
-variable "region" {
-  type    = string
-  default = "us-central1"
-}
-
 variable "zone" {
-  type    = string
-  default = "us-central1-a"
+  type        = string
+  description = "This will be a specific zone"
 }
 
 variable "machine_type" {
-  type    = string
-  default = "f1-micro"
-}
-
-variable "network" {
-  default = "vpc-network"
+  type        = string
+  description = "This will be a machine type"
 }
 
 variable "image" {
-  default = "debian-cloud/debian-10"
+  type        = string
+  description = "This will be a image"
 }
 
-variable "credentials" {
-  default = "credentials.json"
-}
-
-variable "auto_create_subnetworks" {
-  type = bool
-}
 
 variable "auto_delete" {
   type = bool
@@ -47,6 +27,9 @@ variable "maximum_transmission_unit" {
   type = number
 }
 
+variable "auto_create_subnetworks" {
+  type = bool
+}
 
 variable "network_interface" {
   type = object({
