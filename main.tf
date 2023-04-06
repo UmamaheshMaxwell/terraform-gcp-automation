@@ -83,6 +83,10 @@ provider "google" {
     * we can use "terraform output" command
     ? we can use "terraform output vpc" to get only vpc value
 */
-module "output_variables" {
-  source = "./output-variables"
+# module "output_variables" {
+#   source = "./output-variables"
+# }
+
+module "dynamic_blocks" {
+  source = "./dynamic-blocks"
 }
