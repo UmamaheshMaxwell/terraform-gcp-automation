@@ -90,8 +90,7 @@ resource "google_compute_forwarding_rule" "tf_compute_forwarding_rule" {
   target                = google_compute_target_pool.tf_target_pool.self_link
 }
 
-
-
+                                                                                                                                          
 resource "google_compute_target_pool" "tf_target_pool" {
   name = "network-lb"
 
