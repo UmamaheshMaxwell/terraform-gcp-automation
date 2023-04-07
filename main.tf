@@ -87,6 +87,12 @@ provider "google" {
 #   source = "./output-variables"
 # }
 
-module "dynamic_blocks" {
-  source = "./dynamic-blocks"
+# module "dynamic_blocks" {
+#   source = "./dynamic-blocks"
+# }
+
+module "iam-roles" {
+  source = "./iam-roles"
+  email = var.email
+  project = var.project
 }

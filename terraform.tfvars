@@ -67,3 +67,7 @@ protocol = ["icmp", "tcp"]
 ports    = ["22", "88"]
 
 
+/*
+  ? This email is for iam-roles
+*/
+email = "maheshmeka16@gmail.com"

@@ -11,14 +11,14 @@
 #   value = module.instance_template_data
 # }
 
-output "vpc" {
-  value = module.output_variables.vpc
-}
+# output "vpc" {
+#   value = module.output_variables.vpc
+# }
 
-output "subnet" {
-  value = module.output_variables.subnet
-}
+# output "subnet" {
+#   value = module.output_variables.subnet
+# }
 
-output "public_ip" {
-  value = module.output_variables.public_ip
-}
+# output "public_ip" {
+#   value = module.output_variables.public_ip
+# }
