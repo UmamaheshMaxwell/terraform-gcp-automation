@@ -20,7 +20,7 @@ auto_create_subnetworks = false
 /*
   ? List(<string>), List(<Object()>)
 */
-source_ranges = [ "0.0.0.0/0", "0.0.0.0/0", "17.5.7.3/32"  ]
+source_ranges = ["0.0.0.0/0", "0.0.0.0/0", "17.5.7.3/32"]
 
 /*
   ! The difference between a List and Set is that 
@@ -63,6 +63,7 @@ network_interface = {
 /*
   ! Tuple([<number>,<string>,<bool>,...])
 */
+
 protocol = ["icmp", "tcp"]
 ports    = ["22", "88"]
 

@@ -91,8 +91,12 @@ provider "google" {
 #   source = "./dynamic-blocks"
 # }
 
-module "iam-roles" {
-  source = "./iam-roles"
-  email = var.email
-  project = var.project
+# module "iam-roles" {
+#   source = "./iam-roles"
+#   email = var.email
+#   project = var.project
+# }
+
+module "functions" {
+  source = "./functions"
 }
