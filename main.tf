@@ -7,6 +7,7 @@ provider "google" {
   credentials = var.credentials
 }
 
+
 # module "instance_creation" {
 #   source = "./instance-creation"
 #   name = "dev-vm"
@@ -91,12 +92,16 @@ provider "google" {
 #   source = "./dynamic-blocks"
 # }
 
-# module "iam-roles" {
+# module "iam_roles" {
 #   source = "./iam-roles"
 #   email = var.email
 #   project = var.project
 # }
 
-module "functions" {
-  source = "./functions"
+# module "functions" {
+#   source = "./functions"
+# }
+
+module "http_load_balancing" {
+  source = "./http-load-balancer"
 }

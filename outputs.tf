@@ -22,3 +22,14 @@
 # output "public_ip" {
 #   value = module.output_variables.public_ip
 # }
+
+output "nameservers" {
+  value = module.http_load_balancing.nameservers
+}
+output "godaddy_key" {
+  value = jsondecode(file("./godaddy.json")).key
+}
+
+output "godaddy_secret" {
+  value = jsondecode(file("./godaddy.json")).secret
+}

@@ -70,7 +70,7 @@ resource "google_compute_address" "tf_static_ip" {
 }
 
 resource "google_compute_http_health_check" "tf_health_check" {
-  name = "network-healthcheck"
+  name = "network-lb-health-check"
   timeout_sec        = 5
   check_interval_sec = 5
 
