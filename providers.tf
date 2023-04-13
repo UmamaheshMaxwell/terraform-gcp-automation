@@ -42,3 +42,12 @@
 #   database   = "studentdb"
 #   privileges = ["SELECT", "INSERT", "UPDATE"]
 # }
+
+# terraform {
+#   required_providers {
+#     docker = {
+#       source  = "kreuzwerker/docker"
+#       version = "3.0.2"
+#     }
+#   }
+# }

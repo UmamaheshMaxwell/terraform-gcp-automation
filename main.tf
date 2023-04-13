@@ -106,6 +106,11 @@ provider "google" {
 #   source = "./http-load-balancer"
 # }
 
-module "jenkins_server" {
-  source = "./jenkins-server"
+# module "jenkins_server" {
+#   source = "./jenkins-server"
+# }
+
+module "cloud_run" {
+  source = "./cloud-run"
+  project = var.project
 }
