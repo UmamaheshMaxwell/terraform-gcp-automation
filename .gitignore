@@ -4,3 +4,4 @@ credentials.json
 terraform.tfstate.backup
 tfplan
 godaddy.json
+

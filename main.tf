@@ -110,7 +110,11 @@ provider "google" {
 #   source = "./jenkins-server"
 # }
 
-module "cloud_run" {
-  source = "./cloud-run"
-  project = var.project
+# module "cloud_run" {
+#   source = "./cloud-run"
+#   project = var.project
+# }
+
+module "local-remote-exec" {
+  source = "./local-remote-exec"
 }

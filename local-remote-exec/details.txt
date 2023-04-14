@@ -1,0 +1,2 @@
+vpc-1 is created 
+resource is destroyed 
