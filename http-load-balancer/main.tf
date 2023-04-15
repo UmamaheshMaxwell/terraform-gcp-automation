@@ -128,73 +128,73 @@ resource "google_compute_global_address" "tf_external_ip" {
   name = "http-external-ip"
 }
 
-/*
-    * To create front-end configuration for HTTP
-*/
-
-# http proxy
-
-resource "google_compute_target_http_proxy" "tf_http_proxy" {
-  name     = "http-proxy"
-  url_map  = google_compute_url_map.tf_url_map.id
-}
-
-# url map
-# UrlMaps are used to route requests to a backend service based on rules 
-# that you define for the host and path of an incoming URL.
-resource "google_compute_url_map" "tf_url_map" {
-  name            = "http-url-map"
-  default_service = google_compute_backend_service.tf_http_backend.id
-}
-
-# forwarding rule
-resource "google_compute_global_forwarding_rule" "tf_forwarding_rule" {
-  name                  = "http-frontend"
-  ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL"
-  port_range            = "80"
-  target                = google_compute_target_http_proxy.tf_http_proxy.id
-  ip_address            = google_compute_global_address.tf_external_ip.id
-}
-
 # /*
-#     * To create front-end configuration for HTTPS
+#     * To create front-end configuration for HTTP
 # */
+
+# # http proxy
+
+# resource "google_compute_target_http_proxy" "tf_http_proxy" {
+#   name     = "http-proxy"
+#   url_map  = google_compute_url_map.tf_url_map.id
+# }
 
 # # url map
 # # UrlMaps are used to route requests to a backend service based on rules 
 # # that you define for the host and path of an incoming URL.
 # resource "google_compute_url_map" "tf_url_map" {
-#   name            = "https-url-map"
+#   name            = "http-url-map"
 #   default_service = google_compute_backend_service.tf_http_backend.id
-#   # default_url_redirect {
-#   #   strip_query = false
-#   #   https_redirect = true
-#   # }
-# }
-
-# resource "google_compute_managed_ssl_certificate" "tf_ssl_certificate" {
-#   name = "https-certs"
-#   managed {
-#     domains = ["devopswithkube.com"]
-#   }
-# }
-
-# resource "google_compute_target_https_proxy" "tf_https_proxy" {
-#   name             = "https-proxy"
-#   url_map          = google_compute_url_map.tf_url_map.id
-#   ssl_certificates = [google_compute_managed_ssl_certificate.tf_ssl_certificate.id]
 # }
 
 # # forwarding rule
 # resource "google_compute_global_forwarding_rule" "tf_forwarding_rule" {
-#   name                  = "https-frontend"
+#   name                  = "http-frontend"
 #   ip_protocol           = "TCP"
 #   load_balancing_scheme = "EXTERNAL"
-#   port_range            = "443"
-#   target                = google_compute_target_https_proxy.tf_https_proxy.id
+#   port_range            = "80"
+#   target                = google_compute_target_http_proxy.tf_http_proxy.id
 #   ip_address            = google_compute_global_address.tf_external_ip.id
 # }
+
+/*
+    * To create front-end configuration for HTTPS
+*/
+
+# url map
+# UrlMaps are used to route requests to a backend service based on rules 
+# that you define for the host and path of an incoming URL.
+resource "google_compute_url_map" "tf_url_map" {
+  name            = "https-url-map"
+  default_service = google_compute_backend_service.tf_http_backend.id
+  # default_url_redirect {
+  #   strip_query = false
+  #   https_redirect = true
+  # }
+}
+
+resource "google_compute_managed_ssl_certificate" "tf_ssl_certificate" {
+  name = "https-certs"
+  managed {
+    domains = ["devopswithkube.com"]
+  }
+}
+
+resource "google_compute_target_https_proxy" "tf_https_proxy" {
+  name             = "https-proxy"
+  url_map          = google_compute_url_map.tf_url_map.id
+  ssl_certificates = [google_compute_managed_ssl_certificate.tf_ssl_certificate.id]
+}
+
+# forwarding rule
+resource "google_compute_global_forwarding_rule" "tf_forwarding_rule" {
+  name                  = "https-frontend"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL"
+  port_range            = "443"
+  target                = google_compute_target_https_proxy.tf_https_proxy.id
+  ip_address            = google_compute_global_address.tf_external_ip.id
+}
 
 locals {
   backends = [
@@ -233,6 +233,9 @@ resource "google_compute_backend_service" "tf_http_backend" {
 resource "google_dns_managed_zone" "tf_managed_zone" {
   name     = "prod-zone"
   dns_name = "devopswithkube.com."
+  dnssec_config {
+    state = "on"
+  }
 }
 
 resource "google_dns_record_set" "tfs_frontend" {
