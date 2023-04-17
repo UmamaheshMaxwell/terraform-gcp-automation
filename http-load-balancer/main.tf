@@ -4,14 +4,14 @@
 terraform {
   required_providers {
     godaddy = {
-        source = "n3integration/godaddy"
-        version = "~> 1.9.1"
+      source  = "n3integration/godaddy"
+      version = "~> 1.9.1"
     }
   }
 }
 
 provider "godaddy" {
-  key = jsondecode(file("./godaddy.json")).key
+  key    = jsondecode(file("./godaddy.json")).key
   secret = jsondecode(file("./godaddy.json")).secret
 }
 
@@ -71,8 +71,8 @@ resource "google_compute_region_instance_group_manager" "tf_instance_group1" {
 
   // Setting port for backend service
   named_port {
-     name = "http-lb-port"
-     port = 80
+    name = "http-lb-port"
+    port = 80
   }
 
   version {
@@ -98,8 +98,8 @@ resource "google_compute_region_instance_group_manager" "tf_instance_group2" {
 
   // Setting port for backend service
   named_port {
-     name = "http-lb-port"
-     port = 80
+    name = "http-lb-port"
+    port = 80
   }
 
   version {
@@ -167,10 +167,27 @@ resource "google_compute_global_address" "tf_external_ip" {
 resource "google_compute_url_map" "tf_url_map" {
   name            = "https-url-map"
   default_service = google_compute_backend_service.tf_http_backend.id
-  # default_url_redirect {
-  #   strip_query = false
-  #   https_redirect = true
-  # }
+
+  host_rule {
+    hosts = ["devopswithkube.com"]
+
+    path_matcher = "path-matcher"
+  }
+
+  path_matcher {
+    name            = "path-matcher"
+    default_service =  google_compute_backend_service.tf_http_backend.id
+
+    path_rule {
+      paths   = ["/nature/*"]
+      service = google_compute_backend_bucket.tf_backend_bucket_1.id
+    }
+
+    path_rule {
+      paths   = ["/dogs/*"]
+      service = google_compute_backend_bucket.tf_backend_bucket_2.id
+    }
+  }
 }
 
 resource "google_compute_managed_ssl_certificate" "tf_ssl_certificate" {
@@ -203,14 +220,18 @@ locals {
   ]
 }
 
+/*
+    * To create backend configuration
+*/
+
 resource "google_compute_backend_service" "tf_http_backend" {
-  name             = "http-backend"
-  protocol         = "HTTP"
-  port_name        = "http-lb-port"
-  timeout_sec      = 30
-  session_affinity = "CLIENT_IP"
+  name                            = "http-backend"
+  protocol                        = "HTTP"
+  port_name                       = "http-lb-port"
+  timeout_sec                     = 30
+  session_affinity                = "CLIENT_IP"
   connection_draining_timeout_sec = 300
-  health_checks    = [google_compute_http_health_check.tf_http_health_check.id]
+  health_checks                   = [google_compute_http_health_check.tf_http_health_check.id]
   dynamic "backend" {
     for_each = local.backends
     content {
@@ -225,6 +246,86 @@ resource "google_compute_backend_service" "tf_http_backend" {
   # }
 
 }
+
+/*
+    * To create backend storage
+*/
+
+resource "google_storage_bucket" "tf_bucket_1" {
+  name                        = "http-backend-bucket1"
+  location                    = "us-east1"
+  uniform_bucket_level_access = true
+  storage_class               = "STANDARD"
+  // delete bucket and contents on destroy.
+  force_destroy = true
+}
+
+resource "google_storage_bucket" "tf_bucket_2" {
+  name                        = "http-backend-bucket2"
+  location                    = "us-east1"
+  uniform_bucket_level_access = true
+  storage_class               = "STANDARD"
+  // delete bucket and contents on destroy.
+  force_destroy = true
+}
+
+resource "google_storage_bucket_object" "tf_image_nature" {
+  name         = "nature/Nature.jpeg"
+  source       = "./http-load-balancer/images/nature/Nature.jpeg"
+  content_type = "image/jpeg"
+  bucket = google_storage_bucket.tf_bucket_1.name
+}
+
+resource "google_storage_bucket_object" "tf_nature_home" {
+  name         = "nature/home.html"
+  source       = "./http-load-balancer/images/nature/home.html"
+  content_type = "image/jpeg"
+  bucket = google_storage_bucket.tf_bucket_1.name
+}
+
+resource "google_storage_bucket_object" "tf_image_dog" {
+  name         = "dogs/CuteDog.jpg"
+  source       = "./http-load-balancer/images/dogs/CuteDog.jpg"
+  content_type = "image/jpeg"
+  bucket = google_storage_bucket.tf_bucket_2.name
+}
+
+
+resource "google_storage_bucket_object" "tf_dog_home" {
+  name         = "dogs/home.html"
+  source       = "./http-load-balancer/images/dogs/home.html"
+  content_type = "image/jpeg"
+  bucket = google_storage_bucket.tf_bucket_2.name
+}
+
+# Make buckets public
+resource "google_storage_bucket_iam_member" "tf_bucket_memeber1" {
+  bucket = google_storage_bucket.tf_bucket_1.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+
+resource "google_storage_bucket_iam_member" "tf_bucket_memeber2" {
+  bucket = google_storage_bucket.tf_bucket_2.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+
+# Create LB backend buckets
+resource "google_compute_backend_bucket" "tf_backend_bucket_1" {
+  name        = "nature"
+  description = "Contains nature image"
+  bucket_name = google_storage_bucket.tf_bucket_1.name
+  enable_cdn = true
+}
+
+resource "google_compute_backend_bucket" "tf_backend_bucket_2" {
+  name        = "dogs"
+  description = "Contains dog image"
+  bucket_name = google_storage_bucket.tf_bucket_2.name
+  enable_cdn = true
+}
+
 
 /*
     * Setting up Cloud DNS
