@@ -102,9 +102,9 @@ provider "google" {
 #   source = "./functions"
 # }
 
-module "http_load_balancing" {
-  source = "./http-load-balancer"
-}
+# module "http_load_balancing" {
+#   source = "./http-load-balancer"
+# }
 
 # module "jenkins_server" {
 #   source = "./jenkins-server"
@@ -117,4 +117,12 @@ module "http_load_balancing" {
 
 # module "local-remote-exec" {
 #   source = "./local-remote-exec"
+# }
+
+module "gke-cluster" {
+  source = "./gke-cluster"
+}
+
+# module "gke-public-cluster" {
+#   source = "./gke-public-cluster"
 # }
