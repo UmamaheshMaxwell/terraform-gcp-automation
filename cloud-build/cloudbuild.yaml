@@ -1,0 +1,11 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ["build", "-t", "gcr.io/gcp-training-377619/node-build-app:v1", "."]
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ["push", "gcr.io/gcp-training-377619/node-build-app:v1"]
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ["run", "deploy", "node-build-service", "--allow-unauthenticated", "--image", "gcr.io/gcp-training-377619/node-build-app:v1", "--region", "us-central1"]

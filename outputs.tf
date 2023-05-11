@@ -33,3 +33,7 @@
 # output "godaddy_secret" {
 #   value = jsondecode(file("./godaddy.json")).secret
 # }
+
+output "repo" {
+    value = module.cloud-build.repo
+}
