@@ -10,7 +10,7 @@ resource "google_container_cluster" "tf_gke" {
 
   node_pool {
     name = var.node_pool
-    node_count = 2
+    node_count = 4
     node_config {
         machine_type = var.machine_type
         disk_size_gb = 50

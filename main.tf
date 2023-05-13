@@ -119,10 +119,14 @@ provider "google" {
 #   source = "./local-remote-exec"
 # }
 
-module "gke-cluster" {
-  source = "./gke-cluster"
-}
+# module "gke-cluster" {
+#   source = "./gke-cluster"
+# }
 
 # module "gke-public-cluster" {
 #   source = "./gke-public-cluster"
 # }
+
+module "firewall" {
+  source = "./firewall"
+}
