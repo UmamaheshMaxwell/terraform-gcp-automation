@@ -123,9 +123,9 @@ provider "google" {
 #   source = "./gke-cluster"
 # }
 
-# module "gke-public-cluster" {
-#   source = "./gke-public-cluster"
-# }
+module "cloud-build" {
+  source = "./cloud-build"
+}
 
 module "firewall" {
   source = "./firewall"
